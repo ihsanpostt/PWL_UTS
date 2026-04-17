@@ -2,39 +2,38 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName; // Tambahan untuk mengatasi error nama
+use Filament\Panel;
 
-#[Fillable(['level_id', 'username', 'nama', 'name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+// Tambahkan implementasi HasName
+class User extends Authenticatable implements FilamentUser, HasName
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
-
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
 
-    public function level()
+    protected $fillable = [
+        'level_id', 'username', 'email', 'nama', 'password',
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    public function canAccessPanel(Panel $panel): bool
     {
-        return $this->belongsTo(Level::class, 'level_id', 'level_id');
+        return true; 
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function level() 
+    { 
+        return $this->belongsTo(Level::class, 'level_id', 'level_id'); 
+    }
+
+    // FUNGSI INI YANG MENYELESAIKAN ERROR TADI
+    public function getFilamentName(): string
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->nama; // Mengarahkan Filament untuk menggunakan kolom 'nama'
     }
 }
