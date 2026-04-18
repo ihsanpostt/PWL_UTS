@@ -2,10 +2,8 @@
 
 namespace App\Filament\Resources\Kategoris\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 
 class KategorisTable
 {
@@ -13,18 +11,13 @@ class KategorisTable
     {
         return $table
             ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                TextColumn::make('kategori_kode')
+                    ->searchable()
+                    ->label('Kode Kategori'),
+                    
+                TextColumn::make('kategori_nama')
+                    ->searchable()
+                    ->label('Nama Kategori'),
             ]);
     }
 }
