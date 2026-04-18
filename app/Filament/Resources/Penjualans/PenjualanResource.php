@@ -18,7 +18,9 @@ class PenjualanResource extends Resource
 {
     protected static ?string $model = Penjualan::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \UnitEnum|string|null $navigationGroup = 'Transaksi';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingCart;
 
     public static function form(Schema $schema): Schema
     {
